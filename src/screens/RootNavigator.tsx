@@ -6,5 +6,5 @@ import MainStack from './MainStack';
 
 export const RootNavigator = () => {
   const { username } = useAuth();
-  return <NavigationContainer><AuthStack /></NavigationContainer>;
+  return <NavigationContainer>{username ? <MainStack /> : <AuthStack />}</NavigationContainer>;
 };
