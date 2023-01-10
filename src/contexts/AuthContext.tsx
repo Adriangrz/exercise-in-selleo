@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { getItem, storeItem } from '../utilities/asyncStorage';
+import { getItem, removeItem, storeItem } from '../utilities/asyncStorage';
 
 type Props = {
   children: ReactNode;
@@ -8,11 +8,15 @@ type Props = {
 
 export interface AuthContext {
   setCredentials: (username?: string) => void;
+  logOut: ()=>void;
   username: string | null;
 }
 
 export const AuthContext = createContext<AuthContext>({
   setCredentials(token?: string) {
+    return;
+  },
+  logOut(){
     return;
   },
   username: null,
@@ -38,7 +42,14 @@ export const AuthContextProvider = ({ children }: Props) => {
     }
   };
 
-  return <AuthContext.Provider value={{ username, setCredentials }}>{children}</AuthContext.Provider>;
+  const logOut = () =>{
+    if (username) {
+      setUsername(null);
+      removeItem('username');
+    }
+  };
+
+  return <AuthContext.Provider value={{ username, setCredentials,logOut }}>{children}</AuthContext.Provider>;
 };
 
 const useAuth = () => useContext(AuthContext);
