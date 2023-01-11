@@ -1,7 +1,8 @@
-import { FlatList, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Button, FlatList, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import React, { useEffect, useState } from 'react';
 import styles from "./styles";
-import { PostType } from "../../../types";
+import { CreatePostType, PostType } from "../../../types";
+import { Formik } from "formik";
 
 const PostsScreen = ()=>{
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -14,6 +15,12 @@ const PostsScreen = ()=>{
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
     }
+    const addPost = (values:CreatePostType,setSubmitting:any,resetForm:any) => {
+      const post: PostType = {id:posts[posts.length-1].id+1,title:values.title};
+      setPosts(previousState=>[...previousState,post]);
+      setSubmitting(false);
+      resetForm();
+    }
 
     useEffect(()=>{
       setLoading(true);
@@ -22,11 +29,6 @@ const PostsScreen = ()=>{
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-            Keyboard.dismiss();
-          }}
-          >
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.container}
@@ -37,11 +39,30 @@ const PostsScreen = ()=>{
                 <FlatList
                     data={posts}
                     keyExtractor={({ id }) => id.toString()}
-                    renderItem={({ item }) => <Text>{item.title}  </Text>}
+                    renderItem={({ item }) => <Text style={styles.item}>{item.title}  </Text>}
                 />
             )}
+            <Formik
+                initialValues={{ title: '' }}
+                onSubmit={(values, { setSubmitting, resetForm }) => addPost(values,setSubmitting,resetForm)}
+              >
+                {({ handleChange, handleBlur, handleSubmit, values }) => (
+                  <View>
+              <TextInput
+                style={styles.input}
+                placeholder="title"
+                autoCapitalize="none"
+                autoCorrect={false}
+                blurOnSubmit={false}
+                onChangeText={handleChange('title')}
+                onBlur={handleBlur('title')}
+                value={values.title}
+              />
+              <Button onPress={()=>handleSubmit()} title="Add" />  
+              </View>              
+              )}
+              </Formik>
             </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
         </SafeAreaView>
     );
 };
