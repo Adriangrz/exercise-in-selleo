@@ -8,8 +8,9 @@ import { LoginType } from "../../../types";
 const LoginScreen = ()=>{
     const { setCredentials } = useAuth();
 
-    const login =(values:LoginType)=>{
+    const login =(values:LoginType,setSubmitting:any)=>{
       setCredentials(values.username);
+      setSubmitting(false);
     }
 
     return (
@@ -26,13 +27,14 @@ const LoginScreen = ()=>{
             >
               <Formik
                 initialValues={{ username: '' }}
-                onSubmit={values => login(values)}
+                onSubmit={(values, { setSubmitting }) => login(values,setSubmitting)}
               >
                 {({ handleChange, handleBlur, handleSubmit, values }) => (
                   <View style={styles.inner}>
                     <TextInput
                       style={styles.input}
                       placeholder="username"
+                      autoCapitalize="none"
                       onChangeText={handleChange('username')}
                       onBlur={handleBlur('username')}
                       value={values.username}
