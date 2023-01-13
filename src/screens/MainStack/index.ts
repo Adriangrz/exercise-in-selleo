@@ -1,3 +1,3 @@
-export { default } from './MainStack';
+export { default } from "./MainStack";
 
-export { default as Posts } from './PostsScreen';
+export { default as Posts } from "./PostsScreen";

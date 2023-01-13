@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -6,14 +6,14 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
     borderWidth: 1,
     borderRadius: 15,
     padding: 10,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     margin: 10,
   },
 });

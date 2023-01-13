@@ -1,1 +1,1 @@
-export { default } from './PostsScreen';
+export { default } from "./PostsScreen";

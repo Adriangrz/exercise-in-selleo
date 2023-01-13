@@ -1,3 +1,3 @@
-export { default } from './AuthStack';
+export { default } from "./AuthStack";
 
-export { default as Login } from './LoginScreen';
+export { default as Login } from "./LoginScreen";
