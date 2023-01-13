@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  StatusBar,
   Text,
   TextInput,
   View,
@@ -13,6 +12,16 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles";
 import { CreatePostType, PostType } from "../../../types";
 import { Formik } from "formik";
+
+type ItemProps = {
+  title: string;
+};
+
+const Item = ({ title }: ItemProps) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+  </View>
+);
 
 const PostsScreen = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -45,47 +54,47 @@ const PostsScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-        keyboardVerticalOffset={StatusBar.currentHeight!}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <SafeAreaView style={styles.container}>
         {isLoading ? (
           <Text>Loading...</Text>
         ) : (
-          <FlatList
-            data={posts}
-            keyExtractor={({ id }) => id.toString()}
-            renderItem={({ item }) => (
-              <Text style={styles.item}>{item.title} </Text>
-            )}
-          />
+          <>
+            <FlatList
+              data={posts}
+              keyExtractor={({ id }) => id.toString()}
+              renderItem={({ item }) => <Item title={item.title} />}
+            />
+            <TextInput style={styles.input} />
+          </>
         )}
-        <Formik
-          initialValues={{ title: "" }}
-          onSubmit={(values, { setSubmitting, resetForm }) =>
-            addPost(values, setSubmitting, resetForm)
-          }
-        >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder="title"
-                autoCapitalize="none"
-                autoCorrect={false}
-                blurOnSubmit={false}
-                onChangeText={handleChange("title")}
-                onBlur={handleBlur("title")}
-                value={values.title}
-              />
-              <Button onPress={() => handleSubmit()} title="Add" />
-            </View>
-          )}
-        </Formik>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        {/* <Formik
+            initialValues={{ title: "" }}
+            onSubmit={(values, { setSubmitting, resetForm }) =>
+              addPost(values, setSubmitting, resetForm)
+            }
+          >
+            {({ handleChange, handleBlur, handleSubmit, values }) => (
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="title"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  blurOnSubmit={false}
+                  onChangeText={handleChange("title")}
+                  onBlur={handleBlur("title")}
+                  value={values.title}
+                />
+                <Button onPress={() => handleSubmit()} title="Add" />
+              </View>
+            )}
+          </Formik> */}
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
